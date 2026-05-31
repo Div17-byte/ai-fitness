@@ -1,7 +1,7 @@
-import { ComponentShowcase } from './pages/ComponentShowcase'
+import { AppRouter } from './routes/AppRouter'
 
 function App() {
-  return <ComponentShowcase />
+  return <AppRouter />
 }
 
 export default App
