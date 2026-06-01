@@ -32,8 +32,8 @@ export function HomePage() {
     return (
         <Stack spacing={4}>
             <PageHeader
-                title="AI Fitness MVP"
-                subtitle="A full-stack demo for profile tracking, dashboard insights, chat coaching, workout generation, and meal planning."
+                title="AI Fitness Platform"
+                subtitle="Track your profile, get daily insights, and plan workouts and meals with AI support."
                 action={
                     <Box className="flex flex-col gap-3 sm:flex-row">
                         <Link to="/dashboard" className="inline-block">
@@ -46,7 +46,7 @@ export function HomePage() {
                 }
             />
 
-            <Section title="Why this demo works" description="A small but complete product surface">
+            <Section title="Why this platform works" description="A focused and complete fitness experience">
                 <Box className="grid gap-4 md:grid-cols-3">
                     {featureCards.map((item) => {
                         const Icon = item.icon

@@ -29,7 +29,7 @@ export function ComponentShowcase() {
         action={
           <Box className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
             <Button uiVariant="outlined" size="large" fullWidth className="sm:w-auto">
-              View Demo
+              View Overview
             </Button>
             <Button uiVariant="primary" size="large" fullWidth className="sm:w-auto">
               Start Free

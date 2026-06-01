@@ -26,7 +26,7 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
     const { profile, dashboard } = useFitness()
 
     const content = (
-        <Box sx={{ width: drawerWidth, p: 2.5 }}>
+        <Box sx={{ width: '100%', maxWidth: drawerWidth, p: 2.5, boxSizing: 'border-box', overflowX: 'hidden' }}>
             <Stack spacing={2.5}>
                 <Card padding="lg" sx={{ bgcolor: 'rgba(255,255,255,0.03)' }}>
                     <Stack spacing={1.5}>
@@ -91,13 +91,16 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
 
     return (
         <>
-            <Box sx={{ display: { xs: 'none', lg: 'block' }, width: drawerWidth, flexShrink: 0 }}>
+            <Box sx={{ display: { xs: 'none', lg: 'block' }, width: drawerWidth, flexShrink: 0, boxSizing: 'border-box' }}>
                 <Box
                     sx={{
                         position: 'sticky',
                         top: 88,
                         height: 'calc(100vh - 104px)',
+                        width: '100%',
+                        boxSizing: 'border-box',
                         overflowY: 'auto',
+                        overflowX: 'hidden',
                         px: 2,
                         py: 1.5,
                     }}
@@ -106,7 +109,20 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
                 </Box>
             </Box>
 
-            <Drawer open={mobileOpen} onClose={onClose} sx={{ display: { xs: 'block', lg: 'none' } }}>
+            <Drawer
+                open={mobileOpen}
+                onClose={onClose}
+                sx={{ display: { xs: 'block', lg: 'none' } }}
+                slotProps={{
+                    paper: {
+                        sx: {
+                            width: drawerWidth,
+                            boxSizing: 'border-box',
+                            overflowX: 'hidden',
+                        },
+                    },
+                }}
+            >
                 {content}
             </Drawer>
         </>

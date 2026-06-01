@@ -59,7 +59,7 @@ export function Navbar({ onMenuClick }: NavbarProps) {
                     </Box>
                 </Box>
 
-                <Chip label="Backend proxy active" size="small" sx={{ display: { xs: 'none', sm: 'inline-flex' }, bgcolor: 'rgba(34, 197, 94, 0.15)' }} />
+
             </Toolbar>
         </Box>
     )
