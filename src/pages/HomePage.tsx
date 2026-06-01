@@ -36,12 +36,12 @@ export function HomePage() {
                 subtitle="A full-stack demo for profile tracking, dashboard insights, chat coaching, workout generation, and meal planning."
                 action={
                     <Box className="flex flex-col gap-3 sm:flex-row">
-                        <Button uiVariant="outlined" component={Link} to="/dashboard">
-                            View Dashboard
-                        </Button>
-                        <Button uiVariant="primary" component={Link} to="/profile">
-                            Build Profile
-                        </Button>
+                        <Link to="/dashboard" className="inline-block">
+                            <Button uiVariant="outlined">View Dashboard</Button>
+                        </Link>
+                        <Link to="/profile" className="inline-block">
+                            <Button uiVariant="primary">Build Profile</Button>
+                        </Link>
                     </Box>
                 }
             />
