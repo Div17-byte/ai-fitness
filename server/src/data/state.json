@@ -1,43 +1,6 @@
 {
-  "profile": {
-    "name": "Divanshu",
-    "age": 26,
-    "gender": "Male",
-    "height": 185,
-    "weight": 84,
-    "goal": "General Fitness",
-    "activityLevel": "Lightly active"
-  },
-  "chatHistory": [
-    {
-      "role": "user",
-      "content": "Suggest a meal plan",
-      "createdAt": "2026-06-01T03:39:15.358Z"
-    },
-    {
-      "role": "assistant",
-      "content": "Here is a practical coaching answer based on your profile and request.\n\nEstimated daily calories: 2573 kcal.\nGoal focus: General fitness.\n\nRecommended next step: keep your next training session simple, repeatable, and measurable.",
-      "createdAt": "2026-06-01T03:39:15.358Z"
-    }
-  ],
+  "profile": null,
+  "chatHistory": [],
   "workoutPlans": [],
-  "mealPlans": [
-    {
-      "weight": 84,
-      "goal": "General Fitness",
-      "dietaryPreference": "Balanced",
-      "caloriesTarget": 2573,
-      "profile": {
-        "name": "Divanshu",
-        "age": 26,
-        "gender": "Male",
-        "height": 185,
-        "weight": 84,
-        "goal": "General Fitness",
-        "activityLevel": "Lightly active"
-      },
-      "plan": "Meal Plan for General fitness\nDaily calorie target: 2573 kcal.\nDietary preference: Balanced.\n\nSuggested structure:\n- Breakfast: protein-rich oats with fruit and seeds.\n- Lunch: lean protein bowl with grains and vegetables.\n- Snack: Greek yogurt or a plant-based alternative with berries.\n- Dinner: salmon, chicken, tofu, or beans with vegetables and carbs.\n\nNutrition reminders:\n- Protein at each meal helps preserve muscle.\n- Hydrate throughout the day and adjust intake around training.",
-      "createdAt": "2026-06-01T04:08:42.588Z"
-    }
-  ]
+  "mealPlans": []
 }
