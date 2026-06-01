@@ -35,11 +35,11 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
                                 Profile Snapshot
                             </Typography>
                             <Typography variant="h6" sx={{ fontWeight: 800, lineHeight: 1.2 }}>
-                                {profile?.name || 'Set up your profile'}
+                                Set up your profile
                             </Typography>
                         </Box>
                         <Typography variant="body2" color="text.secondary">
-                            {profile?.goal || dashboard?.currentGoal || 'General Fitness'}
+                            General Fitness
                         </Typography>
                     </Stack>
                 </Card>
