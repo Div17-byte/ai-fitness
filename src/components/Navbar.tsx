@@ -1,7 +1,6 @@
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
 import MenuIcon from '@mui/icons-material/Menu'
 import Box from '@mui/material/Box'
-import Chip from '@mui/material/Chip'
 import IconButton from '@mui/material/IconButton'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
@@ -33,7 +32,7 @@ export function Navbar({ onMenuClick }: NavbarProps) {
                 zIndex: 1200,
                 borderBottom: '1px solid',
                 borderColor: 'divider',
-                bgcolor: 'rgba(3, 7, 18, 0.85)',
+                bgcolor: 'rgba(255, 255, 255, 0.9)',
                 backdropFilter: 'blur(18px)',
             }}
         >

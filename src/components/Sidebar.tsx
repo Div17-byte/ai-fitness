@@ -23,7 +23,7 @@ type IconType = ComponentType<{ fontSize?: 'small' | 'medium' | 'inherit' }>
 const drawerWidth = 300
 
 export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
-    const { profile, dashboard } = useFitness()
+    const { dashboard } = useFitness()
 
     const content = (
         <Box sx={{ width: '100%', maxWidth: drawerWidth, p: 2.5, boxSizing: 'border-box', overflowX: 'hidden' }}>

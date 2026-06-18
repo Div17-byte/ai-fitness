@@ -43,8 +43,8 @@ export function AIResponseCard({ title, subtitle, content, badges = [], action }
                     sx={{
                         whiteSpace: 'pre-wrap',
                         borderRadius: 2,
-                        border: '1px solid rgba(255,255,255,0.06)',
-                        bgcolor: 'rgba(3,7,18,0.45)',
+                        border: '1px solid rgba(0,0,0,0.08)',
+                        bgcolor: 'rgba(16, 185, 129, 0.04)',
                         p: 2,
                         lineHeight: 1.75,
                         color: 'text.primary',

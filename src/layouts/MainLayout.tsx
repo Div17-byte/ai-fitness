@@ -13,7 +13,7 @@ export function MainLayout() {
             sx={{
                 minHeight: '100vh',
                 background:
-                    'radial-gradient(circle at top left, rgba(16,185,129,0.14), transparent 32%), radial-gradient(circle at top right, rgba(34,197,94,0.08), transparent 24%), linear-gradient(180deg, #030712 0%, #040916 58%, #07111f 100%)',
+                    'radial-gradient(circle at top left, rgba(16,185,129,0.04), transparent 32%), radial-gradient(circle at top right, rgba(52,211,153,0.04), transparent 24%), linear-gradient(180deg, #fafaf8 0%, #f7f8f6 58%, #f4f5f3 100%)',
             }}
         >
             <Navbar onMenuClick={() => setMobileOpen(true)} />

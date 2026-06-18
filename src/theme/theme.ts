@@ -1,70 +1,81 @@
 import { createTheme } from '@mui/material/styles'
 
-const emerald = {
-  50: '#ecfdf5',
-  100: '#d1fae5',
-  200: '#a7f3d0',
-  300: '#6ee7b7',
-  400: '#34d399',
-  500: '#10b981',
-  600: '#059669',
-  700: '#047857',
-  800: '#065f46',
-  900: '#064e3b',
+// Emerald Design System Color Palette - Light Theme
+const stitchColors = {
+  primary: '#10b981', // Emerald
+  secondary: '#34d399',
+  tertiary: '#6ee7b7',
+  background: '#fafaf8', // Cream
+  surface: '#ffffff',
+  surfaceContainer: '#f3f4f2',
+  surfaceContainerLow: '#f9f9f7',
+  surfaceContainerHigh: '#ede8e0',
+  surfaceContainerLowest: '#fefdfb',
+  onSurface: '#1a1a1a',
+  onSurfaceVariant: '#5a5a5a',
+  outlineVariant: '#d0d0ce',
+  error: '#dc2626',
+  onPrimary: '#ffffff',
 }
 
 export const theme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: 'light',
     primary: {
-      main: emerald[400],
-      light: emerald[300],
-      dark: emerald[600],
-      contrastText: '#030712',
+      main: stitchColors.primary, // #10b981
+      light: '#34d399',
+      dark: '#059669',
+      contrastText: stitchColors.onPrimary,
     },
     secondary: {
-      main: '#22d3ee',
-      light: '#67e8f9',
-      dark: '#0891b2',
-      contrastText: '#030712',
+      main: stitchColors.secondary, // #34d399
+      light: '#6ee7b7',
+      dark: '#10b981',
+      contrastText: '#ffffff',
     },
-    success: { main: emerald[500] },
-    warning: { main: '#fbbf24' },
-    error: { main: '#f87171' },
+    success: { main: stitchColors.primary },
+    warning: { main: '#f59e0b' },
+    error: { main: stitchColors.error },
     background: {
-      default: '#030712',
-      paper: '#111827',
+      default: stitchColors.background, // #fafaf8
+      paper: stitchColors.surfaceContainer, // #f3f4f2
     },
     text: {
-      primary: '#f9fafb',
-      secondary: '#9ca3af',
+      primary: stitchColors.onSurface, // #1a1a1a
+      secondary: stitchColors.onSurfaceVariant, // #5a5a5a
     },
-    divider: 'rgba(255, 255, 255, 0.08)',
+    divider: stitchColors.outlineVariant,
   },
   typography: {
-    fontFamily: '"Inter", system-ui, -apple-system, sans-serif',
-    h1: { fontWeight: 700, letterSpacing: '-0.02em' },
-    h2: { fontWeight: 700, letterSpacing: '-0.02em' },
-    h3: { fontWeight: 600, letterSpacing: '-0.01em' },
-    h4: { fontWeight: 600 },
-    h5: { fontWeight: 600 },
-    h6: { fontWeight: 600 },
-    subtitle1: { fontWeight: 500 },
-    button: { fontWeight: 600, textTransform: 'none' },
+    fontFamily: '"Manrope", "JetBrains Mono", system-ui, -apple-system, sans-serif',
+    h1: { fontFamily: '"Manrope"', fontWeight: 700, letterSpacing: '-0.02em', fontSize: '32px' },
+    h2: { fontFamily: '"Manrope"', fontWeight: 700, letterSpacing: '-0.02em', fontSize: '28px' },
+    h3: { fontFamily: '"Manrope"', fontWeight: 600, fontSize: '24px' },
+    h4: { fontFamily: '"Manrope"', fontWeight: 600, fontSize: '20px' },
+    h5: { fontFamily: '"Manrope"', fontWeight: 600, fontSize: '16px' },
+    h6: { fontFamily: '"Manrope"', fontWeight: 600, fontSize: '14px' },
+    subtitle1: { fontFamily: '"Manrope"', fontWeight: 500 },
+    body1: { fontFamily: '"Manrope"', fontWeight: 400, fontSize: '16px' },
+    body2: { fontFamily: '"Manrope"', fontWeight: 400, fontSize: '14px' },
+    button: { fontFamily: '"Manrope"', fontWeight: 600, textTransform: 'none' },
+    caption: { fontFamily: '"JetBrains Mono"', fontWeight: 500, fontSize: '12px' },
   },
   shape: {
-    borderRadius: 12,
+    borderRadius: 8,
   },
   components: {
     MuiCssBaseline: {
       styleOverrides: {
         body: {
-          scrollbarColor: `${emerald[700]} #111827`,
+          backgroundColor: stitchColors.background,
+          color: stitchColors.onSurface,
+          scrollbarColor: `${stitchColors.primary} ${stitchColors.surfaceContainer}`,
           '&::-webkit-scrollbar': { width: 8 },
           '&::-webkit-scrollbar-thumb': {
-            backgroundColor: emerald[800],
+            backgroundColor: stitchColors.primary,
             borderRadius: 4,
           },
+          '@import': 'url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap")',
         },
       },
     },
@@ -72,12 +83,20 @@ export const theme = createTheme({
       defaultProps: { disableElevation: true },
       styleOverrides: {
         root: {
-          borderRadius: 10,
+          borderRadius: 8,
           padding: '10px 20px',
+          fontFamily: '"Manrope"',
         },
         sizeLarge: {
           padding: '12px 28px',
           fontSize: '1rem',
+        },
+        contained: {
+          backgroundColor: stitchColors.primary,
+          color: stitchColors.onPrimary,
+          '&:hover': {
+            backgroundColor: '#00b982',
+          },
         },
       },
     },
@@ -85,29 +104,60 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundImage: 'none',
-          border: '1px solid rgba(255, 255, 255, 0.06)',
+          backgroundColor: stitchColors.surface,
+          border: `1px solid ${stitchColors.outlineVariant}`,
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)',
         },
       },
     },
     MuiTextField: {
       defaultProps: { variant: 'outlined', size: 'medium' },
+      styleOverrides: {
+        root: {
+          '& .MuiOutlinedInput-root': {
+            backgroundColor: stitchColors.surface,
+          },
+        },
+      },
     },
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          borderRadius: 10,
+          borderRadius: 8,
+          backgroundColor: stitchColors.surface,
           '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'rgba(52, 211, 153, 0.4)',
+            borderColor: stitchColors.primary,
+          },
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: stitchColors.primary,
+            borderWidth: 1,
           },
         },
       },
     },
     MuiChip: {
       styleOverrides: {
-        root: { fontWeight: 500 },
+        root: { 
+          fontFamily: '"Manrope"',
+          fontWeight: 500,
+          backgroundColor: stitchColors.surfaceContainer,
+          borderColor: stitchColors.outlineVariant,
+        },
+      },
+    },
+    MuiLinearProgress: {
+      styleOverrides: {
+        root: {
+          backgroundColor: stitchColors.surfaceContainerHigh,
+        },
+        bar: {
+          backgroundColor: stitchColors.primary,
+        },
       },
     },
   },
 })
 
-export const brandColors = { emerald }
+export const brandColors = { 
+  ...stitchColors
+}
