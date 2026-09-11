@@ -25,3 +25,8 @@ dist-ssr
 
 # Runtime app data
 server/src/data/state.json
+
+# Environment secrets
+.env
+.env.*
+!.env.example

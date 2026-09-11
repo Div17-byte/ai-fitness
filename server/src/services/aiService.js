@@ -1,18 +1,17 @@
-const {
-  calculateDailyCalories,
-  buildRecommendationList,
-  buildWorkoutFocus,
-  describeGoal,
-} = require('../utils/fitness')
+const { buildRecommendationList } = require('../utils/fitness')
 const { readState, updateState } = require('./storageService')
 
 const defaultModel = process.env.AI_MODEL || 'gpt-4o-mini'
 const baseUrl = (process.env.AI_BASE_URL || 'https://api.openai.com/v1').replace(/\/$/, '')
 const apiKey = process.env.AI_API_KEY || ''
+const siteUrl = process.env.AI_SITE_URL || 'http://localhost:5173'
+const siteName = process.env.AI_SITE_NAME || 'AI Fitness Coach'
 
 async function callProvider(messages) {
   if (!apiKey) {
-    return null
+    const error = new Error('AI_API_KEY is not configured')
+    error.statusCode = 500
+    throw error
   }
 
   const controller = new AbortController()
@@ -25,11 +24,15 @@ async function callProvider(messages) {
       headers: {
         Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
+        // Required by OpenRouter for attribution; harmless for other OpenAI-compatible providers
+        'HTTP-Referer': siteUrl,
+        'X-Title': siteName,
       },
       body: JSON.stringify({
         model: defaultModel,
         messages,
         temperature: Number(process.env.AI_TEMPERATURE || 0.7),
+        max_tokens: Number(process.env.AI_MAX_TOKENS || 4000),
       }),
       signal: controller.signal,
     })
@@ -62,11 +65,9 @@ async function retryProvider(messages, attempts = 2) {
     }
   }
 
-  if (lastError) {
-    console.warn(lastError.message)
-  }
-
-  return null
+  const error = lastError || new Error('AI provider returned an empty response')
+  error.statusCode = error.statusCode || 502
+  throw error
 }
 
 function buildSystemPrompt(profile) {
@@ -82,53 +83,6 @@ function buildSystemPrompt(profile) {
   ].join(' ')
 }
 
-function buildWorkoutFallback(input) {
-  const goal = describeGoal(input.goal || input.profile?.goal)
-  const focus = buildWorkoutFocus(input.goal || input.profile?.goal)
-  const days = Number(input.availableDays || 4)
-  const equipment = String(input.availableEquipment || 'Bodyweight and dumbbells')
-
-  return [
-    `Workout Plan for ${goal}`,
-    `Primary focus: ${focus}.`,
-    `Training days: ${days}.`,
-    `Equipment: ${equipment}.`,
-    '',
-    'Weekly outline:',
-    `1. Day 1 - Lower body strength and core`,
-    `2. Day 2 - Upper body push/pull`,
-    `3. Day 3 - Conditioning and mobility`,
-    `4. Day 4 - Full-body hypertrophy`,
-    '',
-    'Coaching notes:',
-    '- Progress load by 2-5% when sets feel controlled.',
-    '- Keep 1-2 reps in reserve on compound lifts.',
-    '- Finish every session with 5-10 minutes of mobility.',
-  ].join('\n')
-}
-
-function buildMealFallback(input) {
-  const calories = Number(input.caloriesTarget || calculateDailyCalories(input.profile))
-  const goal = describeGoal(input.goal || input.profile?.goal)
-  const preference = String(input.dietaryPreference || 'Balanced').trim()
-
-  return [
-    `Meal Plan for ${goal}`,
-    `Daily calorie target: ${calories} kcal.`,
-    `Dietary preference: ${preference}.`,
-    '',
-    'Suggested structure:',
-    '- Breakfast: protein-rich oats with fruit and seeds.',
-    '- Lunch: lean protein bowl with grains and vegetables.',
-    '- Snack: Greek yogurt or a plant-based alternative with berries.',
-    '- Dinner: salmon, chicken, tofu, or beans with vegetables and carbs.',
-    '',
-    'Nutrition reminders:',
-    '- Protein at each meal helps preserve muscle.',
-    '- Hydrate throughout the day and adjust intake around training.',
-  ].join('\n')
-}
-
 async function chatWithCoach({ message, profile }) {
   const prompt = String(message || '').trim()
 
@@ -138,19 +92,10 @@ async function chatWithCoach({ message, profile }) {
     throw error
   }
 
-  const response = await retryProvider([
+  const reply = await retryProvider([
     { role: 'system', content: buildSystemPrompt(profile) },
     { role: 'user', content: prompt },
   ])
-
-  const reply = response || [
-    'Here is a practical coaching answer based on your profile and request.',
-    '',
-    `Estimated daily calories: ${calculateDailyCalories(profile)} kcal.`,
-    `Goal focus: ${describeGoal(profile?.goal)}.`,
-    '',
-    'Recommended next step: keep your next training session simple, repeatable, and measurable.',
-  ].join('\n')
 
   const state = await updateState((currentState) => ({
     ...currentState,
@@ -165,19 +110,23 @@ async function chatWithCoach({ message, profile }) {
 }
 
 async function generateWorkoutPlan(input = {}) {
+  const profile = input.profile
   const prompt = [
-    `Goal: ${input.goal || input.profile?.goal || 'General Fitness'}`,
+    `Goal: ${input.goal || profile?.goal || 'General Fitness'}`,
     `Experience: ${input.workoutExperience || 'Beginner'}`,
     `Available days: ${input.availableDays || 4}`,
     `Equipment: ${input.availableEquipment || 'Bodyweight'}`,
+    `Age: ${profile?.age || 'unknown'}`,
+    `Gender: ${profile?.gender || 'unknown'}`,
+    `Height: ${profile?.height || 'unknown'} cm`,
+    `Weight: ${profile?.weight || 'unknown'} kg`,
+    `Activity level: ${profile?.activityLevel || 'unknown'}`,
   ].join('\n')
 
-  const response = await retryProvider([
-    { role: 'system', content: 'Generate a structured workout plan with headings, weekly split, and coaching notes.' },
+  const plan = await retryProvider([
+    { role: 'system', content: `${buildSystemPrompt(profile)} Generate a structured workout plan with headings, weekly split, and coaching notes tailored to the user's age, height, and weight.` },
     { role: 'user', content: prompt },
   ])
-
-  const plan = response || buildWorkoutFallback(input)
 
   await updateState((currentState) => ({
     ...currentState,
@@ -191,19 +140,22 @@ async function generateWorkoutPlan(input = {}) {
 }
 
 async function generateMealPlan(input = {}) {
+  const profile = input.profile
   const prompt = [
-    `Weight: ${input.weight || input.profile?.weight || 'unknown'}`,
-    `Goal: ${input.goal || input.profile?.goal || 'General Fitness'}`,
+    `Weight: ${input.weight || profile?.weight || 'unknown'} kg`,
+    `Goal: ${input.goal || profile?.goal || 'General Fitness'}`,
     `Dietary preference: ${input.dietaryPreference || 'Balanced'}`,
     `Calories target: ${input.caloriesTarget || 'calculate for me'}`,
+    `Age: ${profile?.age || 'unknown'}`,
+    `Gender: ${profile?.gender || 'unknown'}`,
+    `Height: ${profile?.height || 'unknown'} cm`,
+    `Activity level: ${profile?.activityLevel || 'unknown'}`,
   ].join('\n')
 
-  const response = await retryProvider([
-    { role: 'system', content: 'Generate a practical meal plan with breakfast, lunch, snack, dinner, and nutrition notes.' },
+  const plan = await retryProvider([
+    { role: 'system', content: `${buildSystemPrompt(profile)} Generate a practical meal plan with breakfast, lunch, snack, dinner, and nutrition notes tailored to the user's age, height, and weight.` },
     { role: 'user', content: prompt },
   ])
-
-  const plan = response || buildMealFallback(input)
 
   await updateState((currentState) => ({
     ...currentState,

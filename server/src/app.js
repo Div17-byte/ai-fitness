@@ -2,12 +2,13 @@ const cors = require('cors')
 const dotenv = require('dotenv')
 const express = require('express')
 
+// Must run before requiring modules that read process.env at load time
+dotenv.config()
+
 const { aiRouter } = require('./routes/aiRoutes')
 const { dashboardRouter } = require('./routes/dashboardRoutes')
 const { profileRouter } = require('./routes/profileRoutes')
 const { notFound, errorHandler } = require('./middleware/errorHandler')
-
-dotenv.config()
 
 function createApp() {
   const app = express()
