@@ -114,7 +114,11 @@ export function FitnessProvider({ children }: FitnessProviderProps) {
 
         try {
             const response = await fitnessApi.sendCoachMessage(message)
-            const assistantReply = response.reply || 'No response was returned.'
+            if (!response.reply) {
+                throw new Error('The AI service returned no coaching response')
+            }
+
+            const assistantReply = response.reply
             setCoachMessages((current) => [...current, { role: 'assistant', content: assistantReply }])
         } catch (error) {
             setError(extractErrorMessage(error))
@@ -129,7 +133,11 @@ export function FitnessProvider({ children }: FitnessProviderProps) {
         setError(null)
         try {
             const response = await fitnessApi.generateWorkoutPlan(payload)
-            const nextPlan = response.plan || 'Workout plan not returned.'
+            if (!response.plan) {
+                throw new Error('The AI service returned no workout plan')
+            }
+
+            const nextPlan = response.plan
             setWorkoutPlan(nextPlan)
             await refreshDashboard()
         } catch (error) {
@@ -144,7 +152,11 @@ export function FitnessProvider({ children }: FitnessProviderProps) {
         setError(null)
         try {
             const response = await fitnessApi.generateMealPlan(payload)
-            const nextPlan = response.plan || 'Meal plan not returned.'
+            if (!response.plan) {
+                throw new Error('The AI service returned no meal plan')
+            }
+
+            const nextPlan = response.plan
             setMealPlan(nextPlan)
             await refreshDashboard()
         } catch (error) {

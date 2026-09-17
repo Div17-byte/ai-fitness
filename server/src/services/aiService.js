@@ -1,4 +1,3 @@
-const { buildRecommendationList } = require('../utils/fitness')
 const { readState, updateState } = require('./storageService')
 
 const defaultModel = process.env.AI_MODEL || 'gpt-4o-mini'
@@ -169,13 +168,13 @@ async function generateMealPlan(input = {}) {
 }
 
 async function generateFitnessAdvice(profile) {
-  const recommendations = buildRecommendationList(profile)
+  const advice = await retryProvider([
+    { role: 'system', content: `${buildSystemPrompt(profile)} Provide a concise set of personalized fitness recommendations for the dashboard. Return three short recommendations, one per line.` },
+    { role: 'user', content: 'Give me today\'s most useful fitness recommendations based on my profile.' },
+  ])
 
   return {
-    reply: [
-      'Fitness advice summary',
-      ...recommendations.map((item) => `- ${item}`),
-    ].join('\n'),
+    reply: advice,
   }
 }
 

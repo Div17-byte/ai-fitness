@@ -1,4 +1,4 @@
-const { buildRecommendationList, calculateDailyCalories, describeGoal } = require('../utils/fitness')
+const { calculateDailyCalories, describeGoal } = require('../utils/fitness')
 const { readState } = require('./storageService')
 const { aiService } = require('./aiService')
 
@@ -24,7 +24,12 @@ async function getDashboard() {
   const latestPlans = await aiService.getLatestPlans()
 
   const calorieEstimate = calculateDailyCalories(profile || {})
-  const recommendations = profile ? buildRecommendationList(profile) : ['Add your profile to generate personalized recommendations.']
+  const recommendations = profile
+    ? (await aiService.generateFitnessAdvice(profile)).reply
+        .split(/\n+/)
+        .map((recommendation) => recommendation.replace(/^[-*]\s*/, '').trim())
+        .filter(Boolean)
+    : []
 
   return {
     profile: summarizeProfile(profile),

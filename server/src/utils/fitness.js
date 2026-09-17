@@ -33,17 +33,6 @@ function describeGoal(goal = 'General Fitness') {
   return 'General fitness'
 }
 
-function buildRecommendationList(profile = {}) {
-  const goal = describeGoal(profile.goal)
-  const calories = calculateDailyCalories(profile)
-
-  return [
-    `${goal} focus: aim for ${goal === 'Weight loss' ? 'a modest calorie deficit' : 'consistent progressive overload'}.`,
-    `Daily calorie estimate: about ${calories} kcal based on your profile.`,
-    `Activity level: ${profile.activityLevel || 'moderately active'}; keep recovery aligned with your training load.`,
-  ]
-}
-
 function buildWorkoutFocus(goal = 'General Fitness') {
   const normalized = String(goal).toLowerCase()
 
@@ -55,7 +44,6 @@ function buildWorkoutFocus(goal = 'General Fitness') {
 
 module.exports = {
   calculateDailyCalories,
-  buildRecommendationList,
   buildWorkoutFocus,
   describeGoal,
 }
